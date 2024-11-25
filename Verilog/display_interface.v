@@ -39,25 +39,21 @@ module Design_Interface (
 
     // ===== Block A ======== // 
     // Multiplexer that is going to change between the digits being used 
-    always @ (check) 
-        begin
-    // Initialing the values for one hot code positions 
-            case (check) 
-                2'b00:
-                    digit = 8'b11111110;
-                2'b01:
-                    digit = 8'b11111101;
-                2'b10:
-                    digit = 8'b11111011;
-                default:
-                    digit = 8'b11110111; 
-            endcase 
-        end 
+    always @(check)
+        case (check) // Initialing the values for one hot code positions
+            2'b00:
+                digit = 8'b11111110;
+            2'b01:
+                digit = 8'b11111101;
+            2'b10:
+                digit = 8'b11111011;
+            default:
+                digit = 8'b11110111; 
+        endcase
             
     // ===== Block B ======== // 
     // Multiplexer that is going to switch between each of the group of 4 bits of the input
-    always @ (v0 or v1 or v2 or v3 or check) 
-        begin 
+    always @(v0 or v1 or v2 or v3 or check)
         //$display("Time: %t, Selector: %h, Check: &h", $time, selector, check);
             if (check == 2'b00)
                 selector = v0; 
@@ -66,27 +62,24 @@ module Design_Interface (
             else if (check == 2'b10)
                 selector = v2; 
             else
-                selector = v3; 
-        end
-        
+                selector = v3;
+
     // ===== Block C ======== // 
     // Multiplexer that is going to switch between the digits of 4-bit dot input
-    always @ (d0 or d1 or d2 or d3 or check) 
-        begin 
-            if (check == 2'b00)
-                pointer = d0;
-            else if (check == 2'b01)
-                pointer = d1; 
-            else if (check == 2'b10)
-                pointer = d2; 
-            else
-                pointer = d3; 
-        end 
+    always @(d0 or d1 or d2 or d3 or check)
+        if (check == 2'b00)
+            pointer = d0;
+        else if (check == 2'b01)
+            pointer = d1; 
+        else if (check == 2'b10)
+            pointer = d2; 
+        else
+            pointer = d3;
             
     // ===== Block D ======== // 
     // Instantiating hex2seg display 
     hex2seg hexa_display (.number(selector), .pattern(LUT_out));
     // Concatenating output of the LUT and dot 
     assign segment = {LUT_out, ~pointer};
-        
+
 endmodule

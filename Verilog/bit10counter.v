@@ -14,16 +14,14 @@ module bit_10_counter (clk_10, rst_10, out_10);
     // Output port
     output out_10;
     
-    always @(posedge clk_10 or posedge rst_10)  
-        begin 
-            if (rst_10) counter_10 <= 10'b0;
-            else counter_10 <= next;
-        end 
+    always @(posedge clk_10 or posedge rst_10)
+        if (rst_10)
+            counter_10 <= 10'b0;
+        else
+            counter_10 <= next;
     
-    always @(counter_10) 
-        begin
-            next = 1'b1 + counter_10; // Increment
-        end
+    always @(counter_10)
+        next = 1'b1 + counter_10; // Increment
     
     assign out_10 = counter_10[9]; // Output is 1-bit the left most binary digit
 

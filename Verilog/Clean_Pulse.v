@@ -29,43 +29,39 @@ module Clean_pulse (
     
     // State Register
     always @(posedge clock)      // reset will be synchronous
-        begin 
-            if (reset)
-                current_state <= IDLE;
-            else
-                current_state <= next_state;
-        end
+        if (reset)
+            current_state <= IDLE;
+        else
+            current_state <= next_state;
 
     // Next state logic 
     always @(current_state, raw, delay)
-        begin 
-            case (current_state)
-                IDLE:
-                    if (raw)
-                        next_state = PRESSED;       // go to PRESSED if raw is high
-                    else
-                        next_state = IDLE;
-                PRESSED:
-                    next_state = ON;                // go to ON regardless of inputs
-                ON:
-                    if (delay)
-                        next_state = WAITING;       // go to WAITING if delay is high
-                    else
-                        next_state = ON;
-                WAITING:
-                    if (!raw)
-                        next_state = RELEASED;      // go to RELEASED if raw is low
-                    else
-                        next_state = WAITING;
-                RELEASED:
-                    if (delay)
-                        next_state = IDLE;          // go to IDLE if delay is high 
-                    else
-                        next_state = RELEASED;
-                // go to IDLE from RELEASED or unused state 
-                default next_state = IDLE;
-            endcase
-        end
+        case (current_state)
+            IDLE:
+                if (raw)
+                    next_state = PRESSED;       // go to PRESSED if raw is high
+                else
+                    next_state = IDLE;
+            PRESSED:
+                next_state = ON;                // go to ON regardless of inputs
+            ON:
+                if (delay)
+                    next_state = WAITING;       // go to WAITING if delay is high
+                else
+                    next_state = ON;
+            WAITING:
+                if (!raw)
+                    next_state = RELEASED;      // go to RELEASED if raw is low
+                else
+                    next_state = WAITING;
+            RELEASED:
+                if (delay)
+                    next_state = IDLE;          // go to IDLE if delay is high 
+                else
+                    next_state = RELEASED;
+            // go to IDLE from RELEASED or unused state 
+            default next_state = IDLE;
+        endcase
     // Instantiation 16-bit counter
     bit_counter counter_16 (.clk(clock), .rst(reset), .enable(enable), .delay(delay)); 
 

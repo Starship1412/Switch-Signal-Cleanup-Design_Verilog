@@ -11,17 +11,13 @@ module two_bit_counter (clk, rst, out);
     output [1:0] out;
     
     always @(posedge clk or posedge rst)
-        begin
-            if (rst)
-                counter <= 2'b0;
-            else
-                counter <= next;
-        end
+        if (rst)
+            counter <= 2'b0;
+        else
+            counter <= next;
     
     always @(counter)
-        begin
-            next = 1'b1 + counter;   // Increment
-        end
+        next = 1'b1 + counter;   // Increment
     
     assign out = counter;    // 2-bit output
     

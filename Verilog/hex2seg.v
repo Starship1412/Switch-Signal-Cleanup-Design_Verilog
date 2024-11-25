@@ -26,7 +26,6 @@ module hex2seg (
 
 // look-up table to convert 4-bit value to 7-segment pattern (0 = on)
     always @(number)
-    begin
         case(number)
             4'h0:  pattern = 7'b0000001;  // display 0 - all segments on except G
             4'h1:  pattern = 7'b1001111;  // display 1 - segments B and C on
@@ -45,6 +44,5 @@ module hex2seg (
             4'hE:  pattern = 7'b0110000;
             4'hF:  pattern = 7'b0111000;  // display F
         endcase  // no need for default, as all possibilities covered
-    end
 
 endmodule
